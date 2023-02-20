@@ -1,0 +1,44 @@
+﻿@inherits LayoutComponentBase
+
+@using Users.Entities
+
+<RadzenDialog/>
+<RadzenNotification/>
+<RadzenContextMenu/>
+<RadzenTooltip/>
+
+<RadzenLayout class="rz-shadow-3" style="height: 720px;">
+    <RadzenHeader>
+        <div class="d-flex align-items-center">
+            <RadzenSidebarToggle Click="@(() => is_sidebar_expanded = !is_sidebar_expanded)" />
+            <RadzenLabel Text="D F M" />
+        </div>
+    </RadzenHeader>
+    <RadzenSidebar @bind-Expanded="@is_sidebar_expanded">
+        <RadzenPanelMenu>
+            @if (users_service.user_entity != null)
+            {
+                <RadzenPanelMenuItem Text="Estates" Icon="home" Path="Estates" />
+                <RadzenPanelMenuItem Text="Transfers" Icon="assignment" Path="Transfers" />
+                @if (users_service.user_entity.user_role == UserRoleEntity.ADMIN)
+                {
+                    <RadzenPanelMenuItem Text="Users" Icon="account_box" Path="Users" />
+                }
+                <RadzenPanelMenuItem Text="Log Out" Icon="account_box" Path="Users/logout" />
+            }
+            else
+            {
+                <RadzenPanelMenuItem Text="Log In" Icon="account_box" Path="Users/authenticate" />
+                <RadzenPanelMenuItem Text="Register" Icon="account_box" Path="Users/register" />
+            }
+        </RadzenPanelMenu>
+    </RadzenSidebar>
+    <RadzenBody>
+        <div class="p-2">
+            @Body
+        </div>
+    </RadzenBody>
+    <RadzenFooter>
+        DilosiForouMetabibasis (DFM) @@ 2022-2023
+    </RadzenFooter>
+</RadzenLayout>

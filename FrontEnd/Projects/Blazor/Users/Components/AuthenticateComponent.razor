@@ -1,0 +1,26 @@
+@page "/Users/authenticate"
+
+<div class="col-md-6 offset-md-3 mt-5">
+    <div class="card">
+        <h4 class="card-header">Log In</h4>
+        <div class="card-body">
+            <EditForm Model="@user_entity">
+                <RadzenCard>
+                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Email</RadzenText>
+                    <RadzenTextBox @bind-Value=@user_entity.email TValue="string" />
+                </RadzenCard>
+
+                <RadzenCard>
+                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Password</RadzenText>
+                    <RadzenPassword @bind-Value=@user_entity.password />
+                </RadzenCard>
+
+                <RadzenButton Click=@(authenticate) Text="Log In" ButtonStyle="ButtonStyle.Success" />
+                
+                @if (!string.IsNullOrEmpty(error)) {
+                    <div class="alert alert-danger mt-3 mb-0">@error</div>
+                }
+            </EditForm>
+        </div>
+    </div>
+</div>

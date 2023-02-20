@@ -1,0 +1,211 @@
+﻿@page "/Transfers/{Id:int}"
+
+@using Users.Entities
+@using Estates.Entities
+
+@if (loading)
+{
+    <span class="spinner-border spinner-border-sm mr-1"></span>
+}
+else
+{
+    <div class="col-md-6 offset-md-3 mt-5">
+        <div class="card">
+            <h4 class="card-header">Transfer</h4>
+            <div class="card-body">
+                <EditForm Model="@transfer_entity">
+                    @if (this.users_service.user_entity.user_role == UserRoleEntity.ADMIN)
+                    {
+                        <RadzenCard>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Notary</RadzenText>
+                            <RadzenDropDown
+                                AllowClear="true"
+                                AllowFiltering="true"
+                                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                Data=@notary_entities
+                                TValue="UserEntity"
+                                TextProperty="fullname"
+                                @bind-Value=@transfer_entity.notary />
+                        </RadzenCard>
+                    }
+                    else if (this.users_service.user_entity.user_role != UserRoleEntity.NOTARY)
+                    {
+                        <RadzenCard>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Notary</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H4">@transfer_entity.notary.fullname</RadzenText>
+                        </RadzenCard>
+                    }
+
+                    <RadzenCard>
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Estate</RadzenText>
+                        @if (this.users_service.user_entity.user_role == UserRoleEntity.ADMIN ||
+                            this.users_service.user_entity.user_role == UserRoleEntity.NOTARY)
+                        {
+                            <RadzenDropDown
+                                AllowClear="true"
+                                AllowFiltering="true"
+                                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                Data=@estate_entities
+                                TValue="EstateEntity"
+                                TextProperty="description"
+                                @bind-Value=@transfer_entity.estate />
+                        }
+                        else
+                        {
+                            <RadzenDropDown
+                                AllowClear="true"
+                                AllowFiltering="true"
+                                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                Data=@estate_entities
+                                TValue="EstateEntity"
+                                TextProperty="description"
+                                @bind-Value=@transfer_entity.estate
+                                Disabled />
+                        }
+                    </RadzenCard>
+
+                    <RadzenCard>
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Buyer</RadzenText>
+                        @if (this.users_service.user_entity.user_role == UserRoleEntity.ADMIN ||
+                            this.users_service.user_entity.user_role == UserRoleEntity.NOTARY)
+                        {
+                            <RadzenDropDown
+                                AllowClear="true"
+                                AllowFiltering="true"
+                                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                Data=@buyer_entities
+                                TValue="UserEntity"
+                                TextProperty="fullname"
+                                @bind-Value=@transfer_entity.buyer />
+                        }
+                        else
+                        {
+                            <RadzenDropDown
+                                AllowClear="true"
+                                AllowFiltering="true"
+                                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                Data=@buyer_entities
+                                TValue="UserEntity"
+                                TextProperty="fullname"
+                                @bind-Value=@transfer_entity.buyer
+                                Disabled />
+                        }
+                    </RadzenCard>
+
+                    <RadzenCard>
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Seller Signed</RadzenText>
+
+                        @if (this.users_service.user_entity.user_role == UserRoleEntity.ADMIN ||
+                            this.users_service.user_entity.user_role == UserRoleEntity.SELLER)
+                        {
+                            <RadzenCheckBox
+                                @bind-Value="transfer_entity.has_seller_signed"
+                                TriState="false"
+                                TValue="bool" />
+                        }
+                        else
+                        {
+                            <RadzenCheckBox
+                                @bind-Value="transfer_entity.has_seller_signed"
+                                TriState="false"
+                                TValue="bool"
+                                Disabled />
+                        }
+                    </RadzenCard>
+
+                    <RadzenCard>
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Buyer Signed</RadzenText>
+                        
+                        @if (this.users_service.user_entity.user_role == UserRoleEntity.ADMIN ||
+                            this.users_service.user_entity.user_role == UserRoleEntity.BUYER)
+                        {
+                            <RadzenCheckBox
+                                @bind-Value="transfer_entity.has_buyer_signed"
+                                TriState="false"
+                                TValue="bool" />
+                        }
+                        else
+                        {
+                            <RadzenCheckBox
+                                @bind-Value="transfer_entity.has_buyer_signed"
+                                TriState="false"
+                                TValue="bool"
+                                Disabled />
+                        }
+                    </RadzenCard>
+
+                    <RadzenCard>
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Is Finalized</RadzenText>
+                        
+                        @if (this.users_service.user_entity.user_role == UserRoleEntity.ADMIN ||
+                            this.users_service.user_entity.user_role == UserRoleEntity.NOTARY)
+                        {
+                            <RadzenCheckBox
+                                @bind-Value="transfer_entity.is_finalized"
+                                TriState="false"
+                                TValue="bool" />
+                        }
+                        else
+                        {
+                            <RadzenCheckBox
+                                @bind-Value="transfer_entity.is_finalized"
+                                TriState="false"
+                                TValue="bool"
+                                Disabled />
+                        }
+                    </RadzenCard>
+
+                    <RadzenCard>
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Is Payed</RadzenText>
+                        
+                        @if (this.users_service.user_entity.user_role == UserRoleEntity.ADMIN ||
+                            this.users_service.user_entity.user_role == UserRoleEntity.NOTARY)
+                        {
+                        <RadzenCheckBox
+                            @bind-Value="transfer_entity.is_payed"
+                            TriState="false"
+                            TValue="bool" />
+                        }
+                        else
+                        {
+                            <RadzenCheckBox
+                            @bind-Value="transfer_entity.is_payed"
+                            TriState="false"
+                            TValue="bool"
+                            Disabled />
+                        }
+                    </RadzenCard>
+
+                    <RadzenCard>
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Is Posted</RadzenText>
+                        
+                        @if (this.users_service.user_entity.user_role == UserRoleEntity.ADMIN ||
+                            this.users_service.user_entity.user_role == UserRoleEntity.NOTARY)
+                        {
+                            <RadzenCheckBox
+                            @bind-Value="transfer_entity.is_posted"
+                            TriState="false"
+                            TValue="bool" />
+                        }
+                        else
+                        {
+                            <RadzenCheckBox
+                            @bind-Value="transfer_entity.is_posted"
+                            TriState="false"
+                            TValue="bool"
+                            Disabled />
+                        }
+                    </RadzenCard>
+
+                    <RadzenButton Click=@(save) Text="Save" ButtonStyle="ButtonStyle.Success" />
+                    <RadzenButton Click=@(cancel) Text="Cancel" ButtonStyle="ButtonStyle.Danger" />
+                    <RadzenButton Click=@(cancel) Text="Back" ButtonStyle="ButtonStyle.Primary" />
+                    
+                    @if (!string.IsNullOrEmpty(error)) {
+                        <div class="alert alert-danger mt-3 mb-0">@error</div>
+                    }
+                </EditForm>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,72 @@
+﻿@page "/Estates/{Id:int}"
+
+@using Users.Entities
+
+@if (loading)
+{
+    <span class="spinner-border spinner-border-sm mr-1"></span>
+}
+else
+{
+    <div class="col-md-6 offset-md-3 mt-5">
+        <div class="card">
+            <h4 class="card-header">Estate</h4>
+            <div class="card-body">
+                <EditForm Model="@estate_entity">
+                    <RadzenCard>
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">
+                            Description
+                        </RadzenText>
+                        
+                        @if (this.users_service.user_entity.user_role == UserRoleEntity.ADMIN ||
+                            this.users_service.user_entity.user_role == UserRoleEntity.SELLER)
+                        {
+                            <RadzenTextBox
+                                TValue="string"
+                                @bind-Value="estate_entity.description" />
+                        }
+                        else
+                        {
+                            <RadzenTextBox
+                                TValue="string"
+                                @bind-Value="estate_entity.description"
+                                Disabled />
+                        }
+                    </RadzenCard>
+
+                    <RadzenCard>
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">
+                            Price
+                        </RadzenText>
+                        @if (this.users_service.user_entity.user_role == UserRoleEntity.ADMIN ||
+                            this.users_service.user_entity.user_role == UserRoleEntity.SELLER)
+                        {
+                            <RadzenNumeric
+                                TValue="double"
+                                @bind-Value="estate_entity.price" />
+                        }
+                        else
+                        {
+                            <RadzenNumeric
+                                TValue="double"
+                                @bind-Value="estate_entity.price"
+                                Disabled />
+                        }
+                    </RadzenCard>
+
+                    @if (this.users_service.user_entity.user_role == UserRoleEntity.ADMIN ||
+                        this.users_service.user_entity.user_role == UserRoleEntity.SELLER)
+                    {
+                        <RadzenButton Click=@(save) Text="Save" ButtonStyle="ButtonStyle.Success" />
+                        <RadzenButton Click=@(cancel) Text="Cancel" ButtonStyle="ButtonStyle.Danger" />
+                    }
+                    <RadzenButton Click=@(cancel) Text="Back" ButtonStyle="ButtonStyle.Primary" />
+                    
+                    @if (!string.IsNullOrEmpty(error)) {
+                        <div class="alert alert-danger mt-3 mb-0">@error</div>
+                    }
+                </EditForm>
+            </div>
+        </div>
+    </div>
+}

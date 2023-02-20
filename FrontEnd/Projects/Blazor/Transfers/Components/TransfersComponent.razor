@@ -1,0 +1,57 @@
+﻿@page "/Transfers"
+
+@using Users.Entities
+@using Blazor.Transfers.Entities
+
+@if (loading)
+{
+    <span class="spinner-border spinner-border-sm mr-1"></span>
+}
+else
+{
+    @if (this.users_service.user_entity.user_role == UserRoleEntity.ADMIN ||
+        this.users_service.user_entity.user_role == UserRoleEntity.NOTARY)
+    {
+        <RadzenButton Click=@(create) Text="Create New" ButtonStyle="ButtonStyle.Primary" />
+    }
+    
+    <RadzenButton Click=@(update) Text="Edit Selected" ButtonStyle="ButtonStyle.Success" />
+
+    @if (this.users_service.user_entity.user_role == UserRoleEntity.ADMIN ||
+        this.users_service.user_entity.user_role == UserRoleEntity.NOTARY)
+    {   
+        <RadzenButton Click=@(delete) Text="Delete Selected" ButtonStyle="ButtonStyle.Danger" />
+    }
+
+    <RadzenDataGrid
+        AllowFiltering="true"
+        AllowColumnResize="true"
+        AllowAlternatingRows="false"
+        FilterMode="FilterMode.Advanced"
+        AllowSorting="true"
+        PageSize="5"
+        AllowPaging="true"
+        PagerHorizontalAlign="HorizontalAlign.Left"
+        ShowPagingSummary="true"
+        Data="@transfer_entities"
+        TItem="TransferEntity"
+        ColumnWidth="300px"
+        LogicalFilterOperator="LogicalFilterOperator.Or"
+        SelectionMode="DataGridSelectionMode.Single"
+        @bind-Value=@selected_transfer_entities>
+        <Columns>
+            <RadzenDataGridColumn TItem="TransferEntity" Property="notary.firstname" Title="Notary First Name" />
+            <RadzenDataGridColumn TItem="TransferEntity" Property="notary.lastname" Title="Notary Last Name" />
+            <RadzenDataGridColumn TItem="TransferEntity" Property="estate.seller.firstname" Title="Seller First Name" />
+            <RadzenDataGridColumn TItem="TransferEntity" Property="estate.seller.lastname" Title="Seller Last Name" />
+            <RadzenDataGridColumn TItem="TransferEntity" Property="estate.description" Title="Estate Description" />
+            <RadzenDataGridColumn TItem="TransferEntity" Property="buyer.firstname" Title="Buyer First Name" />
+            <RadzenDataGridColumn TItem="TransferEntity" Property="buyer.lastname" Title="Buyer Last Name" />
+            <RadzenDataGridColumn TItem="TransferEntity" Property="has_seller_signed" Title="Seller Signed" />
+            <RadzenDataGridColumn TItem="TransferEntity" Property="has_buyer_signed" Title="Buyer Signed" />
+            <RadzenDataGridColumn TItem="TransferEntity" Property="date_finalized" Title="Date Finalized" />
+            <RadzenDataGridColumn TItem="TransferEntity" Property="is_payed" Title="Payed" />
+            <RadzenDataGridColumn TItem="TransferEntity" Property="is_posted" Title="Posted" />
+        </Columns>
+    </RadzenDataGrid>
+}

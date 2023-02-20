@@ -1,0 +1,46 @@
+@page "/Users/register"
+
+<div class="col-md-6 offset-md-3 mt-5">
+    <div class="card">
+        <h4 class="card-header">Register</h4>
+        <div class="card-body">
+            <EditForm Model="@user_entity">
+                <RadzenCard>
+                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Email</RadzenText>
+                    <RadzenTextBox @bind-Value=@user_entity.email TValue="string" />
+                </RadzenCard>
+
+                <RadzenCard>
+                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Password</RadzenText>
+                    <RadzenPassword @bind-Value=@user_entity.password />
+                </RadzenCard>
+
+                <RadzenCard>
+                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">First Name</RadzenText>
+                    <RadzenTextBox @bind-Value=@user_entity.firstname TValue="string" />
+                </RadzenCard>
+
+                <RadzenCard>
+                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Last Name</RadzenText>
+                    <RadzenTextBox @bind-Value=@user_entity.lastname TValue="string" />
+                </RadzenCard>
+
+                <RadzenCard>
+                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Role</RadzenText>
+                    <RadzenDropDown
+                        AllowClear="true"
+                        AllowFiltering="true"
+                        FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                        Data=@user_role_entities
+                        @bind-Value=@user_entity.user_role />
+                </RadzenCard>
+
+                <RadzenButton Click=@(register) Text="Register" ButtonStyle="ButtonStyle.Success" />
+
+                @if (!string.IsNullOrEmpty(error)) {
+                    <div class="alert alert-danger mt-3 mb-0">@error</div>
+                }
+            </EditForm>
+        </div>
+    </div>
+</div>

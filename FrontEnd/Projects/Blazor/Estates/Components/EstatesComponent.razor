@@ -1,0 +1,48 @@
+﻿@page "/Estates"
+
+@using Users.Entities
+@using Blazor.Estates.Entities
+
+@if (loading)
+{
+    <span class="spinner-border spinner-border-sm mr-1"></span>
+}
+else
+{
+    @if (this.users_service.user_entity.user_role == UserRoleEntity.ADMIN ||
+        this.users_service.user_entity.user_role == UserRoleEntity.SELLER)
+    {
+        <RadzenButton Click=@(create) Text="Create New" ButtonStyle="ButtonStyle.Primary" />
+        <RadzenButton Click=@(update) Text="Edit Selected" ButtonStyle="ButtonStyle.Success" />
+        <RadzenButton Click=@(delete) Text="Delete Selected" ButtonStyle="ButtonStyle.Danger" />
+    }
+    else
+    {
+        <RadzenButton Click=@(update) Text="View Selected" ButtonStyle="ButtonStyle.Primary" />
+    }
+
+    <RadzenDataGrid
+        AllowFiltering="true"
+        AllowColumnResize="true"
+        AllowAlternatingRows="false"
+        FilterMode="FilterMode.Advanced"
+        AllowSorting="true"
+        PageSize="5"
+        AllowPaging="true"
+        PagerHorizontalAlign="HorizontalAlign.Left"
+        ShowPagingSummary="true"
+        Data="@estate_entities"
+        TItem="EstateEntity"
+        ColumnWidth="300px"
+        LogicalFilterOperator="LogicalFilterOperator.Or"
+        SelectionMode="DataGridSelectionMode.Single"
+        @bind-Value=@selected_estate_entities>
+        <Columns>
+            <RadzenDataGridColumn TItem="EstateEntity" Property="description" Title="Description" Frozen="true" Width="160px" />
+            <RadzenDataGridColumn TItem="EstateEntity" Property="price" Title="Price" Width="160px" />
+            <RadzenDataGridColumn TItem="EstateEntity" Property="seller.firstname" Title="Seller First Name" Width="160px" />
+            <RadzenDataGridColumn TItem="EstateEntity" Property="seller.lastname" Title="Seller Last Name" Width="160px" />
+            <RadzenDataGridColumn TItem="EstateEntity" Property="seller.lastname" Title="Seller Last Name" Width="160px" />
+        </Columns>
+    </RadzenDataGrid>
+}
